@@ -20,7 +20,7 @@ username=$argv[-1]
 
 if [[ $isTest == true ]]; then
 	localAptUserId=$(getent group aptuser | cut -d: -f3)
-	remoteAptUserId=$(sudo -u $SUDO_USER ssh eureka 'getent group aptuser' | cut -d: -f3)
+	remoteAptUserId=$(sudo -u qiqig ssh eureka 'getent group aptuser' | cut -d: -f3)
 
 	if [[ "$localAptUserId" != "$remoteAptUserId" ]]; then
 		echo "Error: The id of group aptuser is $localAptUserId on local while $remoteAptUserId on remote." >&2
@@ -71,7 +71,7 @@ sudo -u $username cp -r ../slurm-examples /home/$username/shared/
 
 gecos=$(getent passwd $username | cut -d ':' -f 5)
 
-remoteFile=/home/$SUDO_USER/shared/remote-add-user
+remoteFile=/home/qiqig/shared/remote-add-user
 cat <<HERE > $remoteFile
 #!/bin/bash -e
 sudo addgroup --gid $gid $username
@@ -84,11 +84,11 @@ HERE
 
 chmod +x $remoteFile
 
-if ! sudo -u $SUDO_USER ssh eureka $remoteFile; then
+if ! sudo -u qiqig ssh eureka $remoteFile; then
 	echo "Failed to execute remote command,"
 	echo "Please run ~/shared/remote-add-user on eureka."
 fi
-if ! sudo -u $SUDO_USER ssh tatooine $remoteFile; then
+if ! sudo -u qiqig ssh tatooine $remoteFile; then
 	echo "Failed to execute remote command,"
 	echo "Please run ~/shared/remote-add-user on tatooine."
 fi
