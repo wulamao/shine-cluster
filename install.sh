@@ -7,7 +7,10 @@ if [[ -z $1 ]] || [[ ! -d $1 ]]; then
 	exit 1
 fi
 
-foldersToCopy=(lib/systemd etc/security/limits.d)
+foldersToCopy=(
+etc/security/limits.d
+/lib/systemd/system/
+)
 
 function needCopy()
 {
