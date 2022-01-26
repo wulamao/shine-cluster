@@ -11,15 +11,12 @@ Options
 --email         [Required] Specify the email of the new user.
 --public-key    [Required] Specify public key of the new user.
 --zsh           Use Z Shell.
---test          Test system setup.
 "
 			exit;;
 		--email)
 			email=$2; shift 2;;
 		--public-key)
 			publicKey=$2; shift 2;;
-		--test)
-			isTest=true; shift;;
 		*)
 			break;;
 	esac
@@ -28,18 +25,6 @@ done
 username=$argv[-1]
 [[ -z $email ]] && echo '--email is not specified.' >&2 && exit 1
 [[ -z $publicKey ]] && echo '--public-key is not specified.' >&2 && exit 1
-
-
-if [[ $isTest == true ]]; then
-	localAptUserId=$(getent group aptuser | cut -d: -f3)
-	remoteAptUserId=$(sudo -u qiqig ssh eureka 'getent group aptuser' | cut -d: -f3)
-
-	if [[ "$localAptUserId" != "$remoteAptUserId" ]]; then
-		echo "Error: The id of group aptuser is $localAptUserId on local while $remoteAptUserId on remote." >&2
-		exit 1
-	fi
-	exit
-fi
 
 
 if (( $argv[(Ie)--zsh] )); then
